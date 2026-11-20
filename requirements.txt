@@ -1,0 +1,19 @@
+# Milestone 1 and 5: sources
+feedparser>=6.0
+trafilatura>=2.0
+youtube-transcript-api>=1.2
+pyyaml>=6.0
+python-dotenv>=1.0
+
+# Milestone 2: database
+psycopg[binary]>=3.2
+pgvector>=0.3
+
+# Milestone 3 and 4: Claude
+anthropic
+pydantic>=2.7
+
+# Milestone 8: email
+resend
+
+pytest

@@ -1,0 +1,12 @@
+# Copy to profile.yaml (git-ignored) and make it yours. Used in milestone 7.
+favorite_players:
+  - Carlos Alcaraz
+  - Iga Swiatek
+tours: [ATP, WTA]
+interests:
+  - Grand Slam results
+  - injuries and comebacks
+  - rising young players
+not_interested_in:
+  - betting odds
+max_headlines: 10
