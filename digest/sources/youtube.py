@@ -10,7 +10,6 @@ How it works
 3. youtube-transcript-api downloads the captions (auto-generated or manual).
 4. We join the caption snippets into one text and wrap it in an Article.
 
-Try it:  python -m digest.sources.youtube
 """
 
 from datetime import datetime, timedelta, timezone
@@ -28,7 +27,10 @@ FEED_URL = "https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
 
 def _published(entry) -> datetime | None:
     # feedparser gives a time.struct_time in UTC; turn it into an aware datetime.
+    # Use .get to avoid KeyError if the entry has no published date.
     parsed = entry.get("published_parsed")
+
+    #slice the first 6 elements of the parsed time tuple to get year, month, day, hour, minute, second
     return datetime(*parsed[:6], tzinfo=timezone.utc) if parsed else None
 
 
@@ -36,9 +38,10 @@ def get_transcript(video_id: str, languages=("en",)) -> str | None:
     """Return the video's transcript as plain text, or None if it has none."""
     try:
         fetched = YouTubeTranscriptApi().fetch(video_id, languages=languages)
-    except CouldNotRetrieveTranscript:
+    except CouldNotRetrieveTranscript as exc:
         # Covers: captions disabled, no transcript in these languages,
         # video unavailable, rate limited. Skipping is the right call here.
+        print(f"[youtube] {video_id}: {type(exc).__name__}")
         return None
     return " ".join(snippet.text for snippet in fetched)
 
@@ -72,7 +75,7 @@ def fetch_channel(name: str, channel_id: str, since: datetime) -> list[Article]:
 
 
 def fetch(channels: list[dict], hours: int = 24) -> list[Article]:
-    """Articles from every configured channel in the last `hours` hours."""
+    """Articles from every configured channel in the last 24 hours."""
     since = datetime.now(timezone.utc) - timedelta(hours=hours)
     articles = []
     for ch in channels:

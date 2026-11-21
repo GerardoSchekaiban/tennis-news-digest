@@ -17,23 +17,50 @@ from digest.models import Article
 
 def get_full_text(url: str) -> str | None:
     """Download a page and return its main text as Markdown.
+    Return None if the page can't be downloaded or has no text."""
 
-    TODO: use trafilatura. Look at trafilatura.fetch_url and trafilatura.extract
-    (check the `output_format` parameter). Return None when extraction fails.
-    """
-    raise NotImplementedError
+    html = trafilatura.fetch_url(url)
+    if html is None:
+        return None
+    
+    text = trafilatura.extract(html, output_format="markdown")
+    return text
 
 
 def fetch_feed(name: str, url: str, since: datetime) -> list[Article]:
-    """Articles from one feed published after `since`.
+    """Articles for one RSS feed published after `since`."""
 
-    TODO:
-    - parse the feed with feedparser (see youtube.py)
-    - skip entries older than `since`
-    - get the full text; if that fails, fall back to the entry's summary
-    - build and return Article objects
-    """
-    raise NotImplementedError
+    feed = feedparser.parse(url)
+    articles = []
+
+    for entry in feed.entries:
+        published = entry.get("published_parsed")
+
+        if published:
+            published_dt = datetime(*published[:6], tzinfo=timezone.utc) 
+        else:
+            published_dt = None
+            
+        if published_dt and published_dt < since:
+            continue
+
+        text = get_full_text(entry.link)
+
+        if text is None:
+            text = entry.get("summary", "")
+
+        articles.append(
+            Article(
+                source=f"rss:{name}",
+                url=entry.link,
+                title=entry.title,
+                published_at=published_dt,
+                content_md=text,
+                kind="article",
+                extra={"feed": name},
+            )
+        )
+    return articles
 
 
 def fetch(feeds: list[dict], hours: int = 24) -> list[Article]:

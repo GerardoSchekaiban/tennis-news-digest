@@ -7,15 +7,15 @@ from pathlib import Path
 
 import yaml
 
-from digest.sources import youtube  # , rss
+from digest.sources import youtube, rss
 
 
 def run():
     config = yaml.safe_load(Path("config/sources.yaml").read_text())
 
     # 1. fetch (milestones 1 and 5)
-    articles = youtube.fetch(config.get("youtube", []))
-    # articles += rss.fetch(config.get("rss", []))
+    #articles = youtube.fetch(config.get("youtube", []))
+    articles = rss.fetch(config.get("rss", []))
     print(f"fetched {len(articles)} articles")
 
     # 2. store       (milestone 2)  db.save_articles(...)

@@ -1,14 +1,16 @@
 # Sources to fetch. Add, remove and tune freely.
 
 rss:
-  # TODO (milestone 1): find RSS feeds for tennis news and list them here.
-  # Hint: many news sites expose a feed at /rss, /feed or in the page's <link rel="alternate">.
-  - name: example-feed
-    url: https://example.com/tennis/rss
+  # RSS feeds for tennis news
+  - name: BBC Sport Tennis
+    url: https://feeds.bbci.co.uk/sport/tennis/rss.xml
+  - name: ESPN Tennis
+    url: https://www.espn.com/espn/rss/tennis/news
 
 youtube:
   # Every channel has a feed at https://www.youtube.com/feeds/videos.xml?channel_id=<ID>
-  # To find a channel's ID: open the channel page, View Source, search for "channelId"
   # (it starts with "UC"). Add one entry per channel.
   - name: Tennis TV
-    channel_id: UC_REPLACE_WITH_REAL_ID
+    channel_id: UCbcxFkd6B9xUU54InHv4Tig
+  - name: Tennis Channel
+    channel_id: UCDitdIjOjS9Myza9I21IqzQ
