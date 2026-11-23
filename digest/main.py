@@ -6,6 +6,7 @@ Each step is added in its milestone. Uncomment as you go.
 from pathlib import Path
 
 import yaml
+from digest import db
 
 from digest.sources import youtube, rss
 
@@ -19,6 +20,10 @@ def run():
     print(f"fetched {len(articles)} articles")
 
     # 2. store       (milestone 2)  db.save_articles(...)
+    with db.connect() as conn:
+        stored = db.save_articles(conn, articles)
+        print(f"stored {stored} new articles")
+
     # 3. summarize   (milestones 3-4)
     # 4. dedup       (milestone 6)
     # 5. rank        (milestone 7)

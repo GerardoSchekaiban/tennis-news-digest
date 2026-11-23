@@ -1,8 +1,5 @@
 """RSS source: tennis news sites. MILESTONE 1.
-
-Follow the pattern in youtube.py. The skeleton is here; fill in the TODOs.
-
-Try it:  python -m digest.sources.rss
+python -m digest.sources.rss
 """
 
 from datetime import datetime, timedelta, timezone
